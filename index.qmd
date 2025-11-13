@@ -489,6 +489,8 @@ from IPython.display import Image as IPyImage
 IPyImage(filename='progressive_stippling.gif')
 ```
 
+![Progressive stippling animation showing the cumulative dot placement.](progressive_stippling.gif)
+
 ::::
 
 ::::
