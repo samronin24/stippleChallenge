@@ -44,10 +44,6 @@ The method uses a modified "void and cluster" algorithm that combines importance
 
 First, let's load an image that we'll convert to a blue noise stippling pattern. You can use any image you'd like, but we'll demonstrate with the provided example.
 
-::: {.panel-tabset}
-
-### Python
-
 ```{python}
 #| label: load-image
 #| echo: true
@@ -81,8 +77,6 @@ print(f"Image size: {img_array.shape[0]}x{img_array.shape[1]} pixels")
 ```
 Make sure the headshot you want to stipple is saved in the project directory as `sam_headshot.jpg` (keep the `.jpg` extension, or adjust `img_path` to whatever filename you choose).
 
-::::
-
 ## Importance Mapping
 
 Before applying the stippling algorithm, we create an **importance map** that identifies which regions of the image should receive more stipples. The importance map is computed by:
@@ -91,10 +85,6 @@ Before applying the stippling algorithm, we create an **importance map** that id
 - **Extreme tone downweighting**: Smooth Gaussian functions downweight tones below 0.2 (very dark) and above 0.8 (very light), creating a gradual transition that preserves mid-tones
 - **Mid-tone boost**: A smooth Gaussian function centered on mid-tones provides a gradual increase in importance for mid-tone regions, ensuring they receive appropriate stippling density
 - **Selective and effective**: This approach ensures that stipples are distributed appropriately (more dots in dark areas and mid-tones, fewer in extreme dark/light areas) while maintaining good spatial distribution
-
-:::: {.panel-tabset}
-
-### Python
 
 ```{python}
 #| label: importance-map
@@ -177,8 +167,6 @@ def compute_importance(
     return importance
 ```
 
-:::
-
 ## Blue Noise Stippling Algorithm
 
 The stippling algorithm uses a modified void-and-cluster approach that:
@@ -189,10 +177,6 @@ The stippling algorithm uses a modified void-and-cluster approach that:
 4. Iteratively selects points with minimum energy
 5. Adds Gaussian "splats" around selected points to prevent clustering
 6. Balances image content importance with blue noise spatial distribution
-
-::: {.panel-tabset}
-
-### Python
 
 ```{python}
 #| label: stippling-functions
@@ -299,15 +283,9 @@ def void_and_cluster(
     return final_stipple, np.array(samples)
 ```
 
-:::
-
 ## Preparing the Working Image
 
 Before generating the stippling pattern, we prepare the image by resizing if necessary and computing the importance map.
-
-::: {.panel-tabset}
-
-### Python
 
 ```{python}
 #| label: prep-image
@@ -348,15 +326,10 @@ importance_map = compute_importance(
 )
 print("Importance map computed")
 ```
-::::
 
 ## Generating the Stippled Image
 
 Now that the image is preprocessed, run the stippling algorithm and display the results side by side.
-
-:::: {.panel-tabset}
-
-### Python
 
 ```{python}
 #| label: generate-and-display
@@ -400,17 +373,9 @@ plt.tight_layout()
 plt.show()
 ```
 
-::::
-
-::::
-
 ## Progressive Stippling Animation
 
 Now let’s build a GIF that shows the stippling pattern as points accumulate.
-
-:::: {.panel-tabset}
-
-### Python
 
 ```{python}
 #| label: progressive-stippling
@@ -444,8 +409,6 @@ for i in range(1, len(samples)):
 print(f"Generated {len(frames)} frames at counts: {point_counts}")
 ```
 
-### Python
-
 ```{python}
 #| label: create-gif
 #| echo: true
@@ -476,8 +439,6 @@ plt.close(fig)
 print(f"GIF saved to: {gif_path}")
 ```
 
-### Python
-
 ```{python}
 #| label: display-gif
 #| echo: true
@@ -490,7 +451,3 @@ IPyImage(filename='progressive_stippling.gif')
 ```
 
 ![Progressive stippling animation showing the cumulative dot placement.](progressive_stippling.gif)
-
-::::
-
-::::
