@@ -8,45 +8,17 @@ execute:
   eval: true
 ---
 
-# 🎨 Selection Bias & Missing Data Challenge - Part 1
+## Blue Noise Stippling Overview
 
-::: {.callout-important}
-## 📊 Challenge Requirements
+Blue noise stippling recreates imagery with evenly dispersed dots whose density reflects underlying luminance. The method follows Bart Wronski’s progressive importance sampling framework and adds smooth downweighting of extreme shadows and highlights to maintain mid-tone fidelity.
 
-**Your Task:** Reproduce the blue noise stippling process demonstrated below to create:
-1. A stippled version of your chosen image
-2. A progressive stippling GIF animation
-3. Post both to a GitHub Pages site with appropriate captions and a brief explanation
+## Loading the Source Image
 
-**Part 2 Preview:** On November 18th, we'll tackle Part 2 of this challenge, where you'll create a statistical meme about selection bias and missing data using your stippled images.
-:::
-
-## The Problem: Can Algorithms Create Art?
-
-**Core Question:** How can we convert a photograph into an aesthetically pleasing pattern of dots that preserves the visual information of the original image?
-
-**The Challenge:** Blue noise stippling is a technique that converts images into patterns of dots (stipples) using algorithms that balance visual accuracy with spatial distribution. This challenge asks you to implement a modified "void and cluster" algorithm that combines importance sampling with blue noise distribution properties to create stippling patterns that are both visually accurate and spatially well-distributed.
-
-**Our Approach:** We'll use a modified void-and-cluster algorithm that:
-1. Creates an importance map identifying visually important regions
-2. Uses a toroidal (periodic) Gaussian kernel for repulsion to ensure blue noise properties
-3. Iteratively selects points with minimum energy
-4. Balances image content importance with blue noise spatial distribution
-
-
-## Introduction to Blue Noise Stippling
-
-Blue noise stippling is a technique for converting images into a pattern of dots (stipples) that preserves the visual information of the original image while creating an aesthetically pleasing, evenly distributed pattern. This method follows the approach described by [Bart Wronski](https://bartwronski.com/2022/08/31/progressive-image-stippling-and-greedy-blue-noise-importance-sampling/).
-
-The method uses a modified "void and cluster" algorithm that combines importance sampling with blue noise distribution properties to create stippling patterns that are both visually accurate and spatially well-distributed. This version uses **smooth extreme downweighting** that selectively downweights very dark and very light tones while preserving mid-tones, creating a more balanced distribution of stipples across the image.
-
-## Loading the Original Image
-
-First, let's load an image that we'll convert to a blue noise stippling pattern. You can use any image you'd like, but we'll demonstrate with the provided example.
+The analysis uses `sam_headshot.jpg`, converted to grayscale for consistent luminance scaling.
 
 ```{python}
 #| label: load-image
-#| echo: true
+#| echo: false
 #| fig-cap: "Original image before stippling"
 
 import numpy as np
@@ -75,7 +47,7 @@ plt.show()
 print(f"Image shape: {img_array.shape}")
 print(f"Image size: {img_array.shape[0]}x{img_array.shape[1]} pixels")
 ```
-Make sure the headshot you want to stipple is saved in the project directory as `sam_headshot.jpg` (keep the `.jpg` extension, or adjust `img_path` to whatever filename you choose).
+Ensure the source file `sam_headshot.jpg` is stored in the project root or update `img_path` accordingly.
 
 ## Importance Mapping
 
@@ -88,7 +60,7 @@ Before applying the stippling algorithm, we create an **importance map** that id
 
 ```{python}
 #| label: importance-map
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -180,7 +152,7 @@ The stippling algorithm uses a modified void-and-cluster approach that:
 
 ```{python}
 #| label: stippling-functions
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -289,7 +261,7 @@ Before generating the stippling pattern, we prepare the image by resizing if nec
 
 ```{python}
 #| label: prep-image
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -329,14 +301,14 @@ print("Importance map computed")
 
 ## Generating the Stippled Image
 
-Now that the image is preprocessed, run the stippling algorithm and display the results side by side.
+The next figure compares the grayscale input, computed importance map, and resulting stipple distribution.
 
 ```{python}
 #| label: generate-and-display
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
-#| fig-cap: "Original image, importance map, and blue noise stippling"
+#| fig-cap: "Source image, importance map, and blue-noise stippling output"
 #| fig-width: 7
 #| fig-height: 4
 
@@ -373,13 +345,15 @@ plt.tight_layout()
 plt.show()
 ```
 
+The visualization confirms that the importance map concentrates weight in mid-tone facial features, producing a stipple field that preserves contours while maintaining even spacing.
+
 ## Progressive Stippling Animation
 
 Now let’s build a GIF that shows the stippling pattern as points accumulate.
 
 ```{python}
 #| label: progressive-stippling
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -411,7 +385,7 @@ print(f"Generated {len(frames)} frames at counts: {point_counts}")
 
 ```{python}
 #| label: create-gif
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 #| fig-cap: "Progressive stippling animation"
@@ -441,7 +415,7 @@ print(f"GIF saved to: {gif_path}")
 
 ```{python}
 #| label: display-gif
-#| echo: true
+#| echo: false
 #| message: false
 #| warning: false
 
@@ -450,4 +424,6 @@ from IPython.display import Image as IPyImage
 IPyImage(filename='progressive_stippling.gif')
 ```
 
-![Progressive stippling animation showing the cumulative dot placement.](progressive_stippling.gif)
+![Progressive stippling animation with cumulative point milestones.](progressive_stippling.gif)
+
+The animation verifies smooth density growth: early frames prioritize mid-tone features, while later iterations fill background regions without producing visible clusters.
